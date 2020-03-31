@@ -21,9 +21,9 @@ The fastest way to install core SQL Server is to run in administrative shell wit
 ./Install-SqlServer.ps1 
 ```
 
-This assumes number of default parameters and installs by default only `SQLEngine` feature.
+Use `ISOPath` parameter otherwise. If ISO file is on the Windows share (SMB) which is protected, you need to use `ShareCredentials` too.
 
-Run `Get-Help ./Install-SqlServer.ps1 -Full` for parameter details.
+This assumes number of default parameters and installs by default only `SQLEngine` feature. Run `Get-Help ./Install-SqlServer.ps1 -Full` for parameter details.
 
 ## Notes
 

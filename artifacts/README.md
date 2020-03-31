@@ -1,0 +1,1 @@
+- See real [install log](Install-Sql-2020-03-31T16-04-28.log) for *SQLServer 2019 Development Edition*
