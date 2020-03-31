@@ -29,7 +29,7 @@ To **test installation**, after running this script execute:
 
  ```ps1
 Set-Alias sqlcmd "$Env:ProgramFiles\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD.EXE"
-SELECT @@version | sqlcmd.exe
+"SELECT @@version" | sqlcmd.exe
 ```
 
 ## Notes
