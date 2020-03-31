@@ -1,11 +1,9 @@
-#require -version 3
-
 <#
 .SYNOPSIS
     MS SQL Server silent installation script
 
 .DESCRIPTION
-    This script installs MS SQL Server silently from ISO image that can be availble locally or on SMB share.
+    This script installs MS SQL Server silently from ISO image that can be available locally or on SMB share.
     Transcript of entire operation is recorded in the log file with the same name (previous logs are overwritten).
 
     The script lists parameters provided to the native setup but hides sensitive data. See the provided

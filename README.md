@@ -13,17 +13,15 @@ The installer is tested with SQL Servers 2016-2019.
 
 ## Usage
 
-The fastest way to install core SQL Server is via this command:
+The fastest way to install core SQL Server is to run without any parameters if ISO file is in the same directory:
 
-```ps1
-$params = @{
-    IsoPath      = "<path_to>/en_sql_server_2019_developer_x64_dvd_e0079655.iso"
-    Credentials  = Get-Credential domain user     # SMB Share credentials where ISO resides if needed
-}
-.\Install-SqlServer.ps1 @params
+```
+./Install-SqlServer.ps1 
 ```
 
-This assumes number of [default parameters](Install-SqlServer.ps1#L24-60) and installs features `SQLEngine`, `Replication` and `RS`, 
+This assumes number of [default parameters](Install-SqlServer.ps1#L24-60) and installs by default only `SQLEngine` feature.
+
+Run `Get-Help ./Install-SqlServer.ps1 -Full` for parameter details.
 
 ## Notes
 
