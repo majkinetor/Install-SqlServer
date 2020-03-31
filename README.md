@@ -1,19 +1,21 @@
 # Install-SqlServer
 
-This script installs MS SQL Server silently from ISO image that can be available locally or on SMB share.
+This script installs MS SQL Server on Windows OS silently from ISO image that can be available locally or on SMB share.
 Transcript of entire operation is recorded in the log file.
 
 The script lists parameters provided to the native setup but hides sensitive data. See the provided links for SQL Server silent install details.
 
-The installer is tested with SQL Servers 2016-2019.
+The installer is tested with SQL Servers 2016-2019 and PowerShell 3-7.
 
 ## Prerequisites
 
+1. Windows OS
 1. MS SQL Server ISO image
+2. Administrative rights
 
 ## Usage
 
-The fastest way to install core SQL Server is to run without any parameters if ISO file is in the same directory:
+The fastest way to install core SQL Server is to run in administrative shell without any parameters if ISO file is in the same directory:
 
 ```
 ./Install-SqlServer.ps1 

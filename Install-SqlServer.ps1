@@ -90,9 +90,9 @@ $sql_drive = $sql_drive.Root
 
 ls $sql_drive | ft -auto | Out-String
 
-gwmi win32_process | ? { $_.commandLine -like '*setup.exe*/ACTION=install*' } | % { 
+Get-CimInstance win32_process | ? { $_.commandLine -like '*setup.exe*/ACTION=install*' } | % { 
     Write-Host "Sql Server installer is already running, killing it:" $_.Path  "pid: " $_.processId -ForegroundColor red
-    kill $_.processId -Force
+    Stop-Process $_.processId -Force
 }
 
 $cmd =@(
