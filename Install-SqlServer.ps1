@@ -2,7 +2,7 @@
 
 <#
 .SYNOPSIS
-    Sql Server Silent installation script
+    MS SQL Server silent installation script
 
 .DESCRIPTION
     This script installs MS SQL Server silently from ISO image that can be availble locally or on SMB share.
@@ -10,43 +10,20 @@
 
     The script lists parameters provided to the native setup but hides sensitive data. See the provided
     links for SQL Server silent install details.
-
-    To check if existing SQL Server instance is registered execute `SELECT @@version`.
-
-.NOTES
-    When installing over remote powershell session, the followin errors may occur: 
-        There was an error generating the XML document 
-            ... Access denied
-            ... The computer must be trusted for delegation and the current user account must be configured to allow delegation
-
-    The solution: Use session parameter -Authentication CredSSP.
-        
-        To set it up, connecting machine must have group policy set (with gpedit.msc):
-
-            Computer Configuration -> Administrative Templates -> System -> Credentials Delegation.
-            Add wsman/*.<domain>
-                - allow delegating fresh credentials with NTLM-only server authentication
-                - allow delegating fresh credentials
-        
-        The remote machine must be set to behve as CredSSP server:  Enable-WSManCredSSP -Role server
-    
-.LINK
-    https://docs.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-2016-from-the-command-prompt
-    https://msdn.microsoft.com/library/bb500441.aspx?f=255&MSPPError=-2147217396#Anchor_1
 #>
 param(
     # Path to ISO file, if empty and current directory contains single ISO file, it will be used.
     # If IsoPath is on the SMB share, it will be copied locally to c:\install\sql-server.
-    [string]$IsoPath = '',
+    [string] $IsoPath = '',
 
     # Credential is used if ISO is on the SMB share. It must have read access.
     [PSCredential] $ShareCredential,
 
     # Sql Server features, see https://docs.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server-2016-from-the-command-prompt#Feature
     [ValidateSet('SQL', 'SQLEngine', 'Replication', 'FullText', 'DQ', 'PolyBase', 'AdvancedAnalytics', 'AS', 'RS', 'DQC', 'IS', 'MDS', 'SQL_SHARED_MR', 'Tools', 'BC', 'BOL', 'Conn', 'DREPLAY_CLT', 'SNAC_SDK', 'SDK', 'LocalDB')]
-    [string[]] $Features = @('SQLEngine', 'Replication', 'RS'),
+    [string[]] $Features = @('SQLEngine'),
 
-    # Installation directory, mandatory
+    # Specifies a nondefault installation directory
     [string] $InstallDir,
 
     # Data directory. Mandatory, by default "$Env:ProgramFiles\Microsoft SQL Server"
@@ -67,7 +44,7 @@ param(
     [string] $ServiceAccountPassword,
 
     # List of system administrative accounts in the form <domain>\<user>
-    # Mandatory, by default current user will be added as system adminitrator
+    # Mandatory, by default current user will be added as system administrator
     [string[]] $SystemAdminAccounts = @("$Env:USERDOMAIN\$Env:USERNAME"),
 
     # Product key, if omitted, evaluation is used unless VL edition which is already activated
