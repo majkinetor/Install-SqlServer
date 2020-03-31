@@ -19,7 +19,7 @@ The fastest way to install core SQL Server is to run without any parameters if I
 ./Install-SqlServer.ps1 
 ```
 
-This assumes number of [default parameters](Install-SqlServer.ps1#L24-60) and installs by default only `SQLEngine` feature.
+This assumes number of [default parameters](Install-SqlServer.ps1#L123-L152) and installs by default only `SQLEngine` feature.
 
 Run `Get-Help ./Install-SqlServer.ps1 -Full` for parameter details.
 
