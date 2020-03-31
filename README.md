@@ -25,11 +25,18 @@ Use `ISOPath` parameter otherwise. If ISO file is on the Windows share (SMB) whi
 
 This assumes number of default parameters and installs by default only `SQLEngine` feature. Run `Get-Help ./Install-SqlServer.ps1 -Full` for parameter details.
 
+To **test installation**, after running this script execute:
+
+ ```ps1
+Set-Alias sqlcmd "$Env:ProgramFiles\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD.EXE"
+SELECT @@version | sqlcmd.exe
+```
+
 ## Notes
 
 - If share is already mounted Credentials are not required to access remote ISO file.
 - SQL Server Management Studio isn't distributed along with SQL Server any more. Install via chocolatey: [`cinst sql-server-management-studio`](https://chocolatey.org/packages/sql-server-management-studio)
-- To check if existing SQL Server instance is registered execute `SELECT @@version`.
+
 
 ## Troubleshooting
 
