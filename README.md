@@ -1,6 +1,6 @@
 # Install-SqlServer
 
-This script installs MS SQL Server on Windows OS silently from ISO image that can be available locally or on SMB share.
+This script installs MS SQL Server on Windows OS silently from ISO image that can be available locally or downloaded from the Internet.
 Transcript of entire operation is recorded in the log file.
 
 The script lists parameters provided to the native setup but hides sensitive data. See the provided links for SQL Server silent install details.
@@ -15,13 +15,13 @@ The installer is tested with SQL Servers 2016-2019 and PowerShell 3-7.
 
 ## Usage
 
-The fastest way to install core SQL Server is to run in administrative shell without any parameters if ISO file is in the same directory:
+The fastest way to install core SQL Server is to run in administrative shell without any parameters:
 
 ```
 ./Install-SqlServer.ps1 
 ```
 
-Use `ISOPath` parameter otherwise. If ISO file is on the Windows share (SMB) which is protected, you need to use `ShareCredentials` too.
+Use `ISOPath` parameter otherwise.
 
 This assumes number of default parameters and installs by default only `SQLEngine` feature. Run `Get-Help ./Install-SqlServer.ps1 -Full` for parameter details.
 
@@ -34,8 +34,8 @@ Set-Alias sqlcmd "$Env:ProgramFiles\Microsoft SQL Server\Client SDK\ODBC\170\Too
 
 ## Notes
 
-- If share is already mounted Credentials are not required to access remote ISO file.
 - SQL Server Management Studio isn't distributed along with SQL Server any more. Install via chocolatey: [`cinst sql-server-management-studio`](https://chocolatey.org/packages/sql-server-management-studio)
+- On PowerShell 5 progress bar significantly slows down the download. Use `$progressPreference = 'silentlyContinue'` to disable it prior to calling this function.
 
 
 ## Troubleshooting
