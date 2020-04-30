@@ -73,7 +73,7 @@ if (!$IsoPath) {
     if ($hash -and $hash -eq $oldHash) { Write-Host "Hash is OK" } else {
         if ($hash) { Write-Host "Hash is NOT OK"}
         Write-Host "Downloading: $isoPath"
-        Invoke-WebRequest $IsoPath -OutFile $savePath -UseBasicParsing
+        Invoke-WebRequest $IsoPath -OutFile $savePath -UseBasicParsing -Proxy $ENV:HTTP_PROXY
         Get-FileHash -Algorithm MD5 $savePath | % Hash | Out-File "$savePath.md5"
     }
 

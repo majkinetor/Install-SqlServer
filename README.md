@@ -34,6 +34,7 @@ Set-Alias sqlcmd "$Env:ProgramFiles\Microsoft SQL Server\Client SDK\ODBC\170\Too
 
 ## Notes
 
+- Behind the proxy use HTTP_PROXY environment variable
 - SQL Server Management Studio isn't distributed along with SQL Server any more. Install via chocolatey: [`cinst sql-server-management-studio`](https://chocolatey.org/packages/sql-server-management-studio)
 - On PowerShell 5 progress bar significantly slows down the download. Use `$progressPreference = 'silentlyContinue'` to disable it prior to calling this function.
 
