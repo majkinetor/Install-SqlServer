@@ -133,7 +133,10 @@ Write-Host
 
 "$cmd_out"
 Invoke-Expression "$cmd"
-if ($LastExitCode) { throw "SqlServer installation failed, exit code: $LastExitCode" }
+if ($LastExitCode) { 
+    if ($LastExitCode -ne 3010) { throw "SqlServer installation failed, exit code: $LastExitCode" }
+    Write-Warning "SYSTEM REBOOT IS REQUIRED"
+}
 
 "`nInstallation length: {0:f1} minutes" -f ((Get-Date) - $start).TotalMinutes
 
