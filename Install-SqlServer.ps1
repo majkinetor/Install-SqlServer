@@ -138,6 +138,27 @@ if ($LastExitCode) {
     Write-Warning "SYSTEM REBOOT IS REQUIRED"
 }
 
+Write-Host "Enable SQL Server TCP Protocol and Named Pipes"
+
+$PSModulePath = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\Session Manager\Environment").GetValue('PSMODULEPATH')
+$sqlpsPath = $PSModulePath -split ';' | ? {$_ -like '*Sql Server*'}
+Import-Module "$sqlpsPath\SQLPS\SQLPS.psd1"
+
+$smo = 'Microsoft.SqlServer.Management.Smo.'  
+$wmi = new-object ($smo + 'Wmi.ManagedComputer').  
+
+$uri = "ManagedComputer[@Name='$Env:COMPUTERNAME']/ ServerInstance[@Name='$InstanceName']/ServerProtocol[@Name='Tcp']"  
+$Tcp = $wmi.GetSmoObject($uri)  
+$Tcp.IsEnabled = $true
+$Tcp.Alter()
+
+$uri = "ManagedComputer[@Name='$Env:COMPUTERNAME']/ ServerInstance[@Name='$InstanceName']/ServerProtocol[@Name='Np']"  
+$Np = $wmi.GetSmoObject($uri)  
+$Np.IsEnabled = $true  
+$Np.Alter()  
+
+Get-Service $InstanceName | Restart-Service -Force
+
 "`nInstallation length: {0:f1} minutes" -f ((Get-Date) - $start).TotalMinutes
 
 Dismount-DiskImage $IsoPath
