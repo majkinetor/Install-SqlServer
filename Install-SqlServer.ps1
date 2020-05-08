@@ -78,6 +78,7 @@ if (!$IsoPath) {
         Write-Host "Downloading: $isoPath"
         
         if ($UseBitsTransfer) {
+            Write-Host "Using bits transfer"
             $proxy = if ($ENV:HTTP_PROXY) { @{ ProxyList = $ENV:HTTP_PROXY -replace 'http?://'; ProxyUsage = 'Override' }} else { @{} }
             Start-BitsTransfer -Source $isoPath -Destination $saveDir @proxy
         }  else {
