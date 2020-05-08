@@ -45,7 +45,10 @@ param(
     [string[]] $SystemAdminAccounts = @("$Env:USERDOMAIN\$Env:USERNAME"),
 
     # Product key, if omitted, evaluation is used unless VL edition which is already activated
-    [string] $ProductKey
+    [string] $ProductKey, 
+
+    # Use bits transfer to get files from the Internet
+    [switch] $UseBitsTransfer
 )
 
 $ErrorActionPreference = 'STOP'
@@ -73,7 +76,14 @@ if (!$IsoPath) {
     if ($hash -and $hash -eq $oldHash) { Write-Host "Hash is OK" } else {
         if ($hash) { Write-Host "Hash is NOT OK"}
         Write-Host "Downloading: $isoPath"
-        Invoke-WebRequest $IsoPath -OutFile $savePath -UseBasicParsing -Proxy $ENV:HTTP_PROXY
+        
+        if ($UseBitsTransfer) {
+            $proxy = if ($ENV:HTTP_PROXY) { @{ ProxyList = $ENV:HTTP_PROXY -replace 'http?://'; ProxyUsage = 'Override' }} else { @{} }
+            Start-BitsTransfer -Source $isoPath -Destination $saveDir @proxy
+        }  else {
+            Invoke-WebRequest $IsoPath -OutFile $savePath -UseBasicParsing -Proxy $ENV:HTTP_PROXY
+        }
+
         Get-FileHash -Algorithm MD5 $savePath | % Hash | Out-File "$savePath.md5"
     }
 
