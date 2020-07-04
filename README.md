@@ -10,8 +10,8 @@ The installer is tested with SQL Servers 2016-2019 and PowerShell 3-7.
 ## Prerequisites
 
 1. Windows OS
-1. MS SQL Server ISO image
 2. Administrative rights
+1. MS SQL Server ISO image [optional]
 
 ## Usage
 
