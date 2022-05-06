@@ -15,7 +15,7 @@ The installer is tested with SQL Servers 2016-2019 and PowerShell 3-7.
 
 ## Usage
 
-The fastest way to install core SQL Server is to run in administrative shell without any parameters:
+The fastest way to install core SQL Server is to run in administrative shell:
 
 ```ps1
 ./Install-SqlServer.ps1 -EnableProtocols
