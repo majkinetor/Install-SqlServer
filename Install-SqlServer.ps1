@@ -45,10 +45,13 @@ param(
     [string[]] $SystemAdminAccounts = @("$Env:USERDOMAIN\$Env:USERNAME"),
 
     # Product key, if omitted, evaluation is used unless VL edition which is already activated
-    [string] $ProductKey, 
+    [string] $ProductKey,
 
     # Use bits transfer to get files from the Internet
-    [switch] $UseBitsTransfer
+    [switch] $UseBitsTransfer,
+
+    # Enable SQL Server protocols: TCP/IP, Named Pipes
+    [switch] $EnableProtocols
 )
 
 $ErrorActionPreference = 'STOP'
@@ -72,11 +75,11 @@ if (!$IsoPath) {
         $hash    = Get-FileHash -Algorithm MD5 $savePath | % Hash
         $oldHash = Get-Content "$savePath.md5" -ErrorAction 0
     }
-    
+
     if ($hash -and $hash -eq $oldHash) { Write-Host "Hash is OK" } else {
         if ($hash) { Write-Host "Hash is NOT OK"}
         Write-Host "Downloading: $isoPath"
-        
+
         if ($UseBitsTransfer) {
             Write-Host "Using bits transfer"
             $proxy = if ($ENV:HTTP_PROXY) { @{ ProxyList = $ENV:HTTP_PROXY -replace 'http?://'; ProxyUsage = 'Override' }} else { @{} }
@@ -97,7 +100,7 @@ $volume    = Mount-DiskImage $IsoPath -StorageType ISO -PassThru | Get-Volume
 $sql_drive = $volume.DriveLetter + ':'
 Get-ChildItem $sql_drive | ft -auto | Out-String
 
-Get-CimInstance win32_process | ? { $_.commandLine -like '*setup.exe*/ACTION=install*' } | % { 
+Get-CimInstance win32_process | ? { $_.commandLine -like '*setup.exe*/ACTION=install*' } | % {
     Write-Host "Sql Server installer is already running, killing it:" $_.Path  "pid: " $_.processId
     Stop-Process $_.processId -Force
 }
@@ -144,31 +147,24 @@ Write-Host
 
 "$cmd_out"
 Invoke-Expression "$cmd"
-if ($LastExitCode) { 
+if ($LastExitCode) {
     if ($LastExitCode -ne 3010) { throw "SqlServer installation failed, exit code: $LastExitCode" }
     Write-Warning "SYSTEM REBOOT IS REQUIRED"
 }
 
-Write-Host "Enable SQL Server TCP Protocol and Named Pipes"
+if ($EnableProtocols) {
+    function Enable-Protocol ($ProtocolName) { $sqlNP | ? ProtocolDisplayName -eq $ProtocolName | Invoke-CimMethod -Name SetEnable }
 
-$PSModulePath = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\Session Manager\Environment").GetValue('PSMODULEPATH')
-$sqlpsPath = $PSModulePath -split ';' | ? {$_ -like '*Sql Server*'}
-Import-Module "$sqlpsPath\SQLPS\SQLPS.psd1"
+    Write-Host "Enable SQL Server protocols: TCP/IP, Named Pipes"
 
-$smo = 'Microsoft.SqlServer.Management.Smo.'  
-$wmi = new-object ($smo + 'Wmi.ManagedComputer').  
+    $sqlCM = Get-CimInstance -Namespace 'root\Microsoft\SqlServer' -ClassName "__NAMESPACE"  | ? name -match 'ComputerManagement' | Select-Object -Expand name
+    $sqlNP = Get-CimInstance -Namespace "root\Microsoft\SqlServer\$sqlCM" -ClassName ServerNetworkProtocol
 
-$uri = "ManagedComputer[@Name='$Env:COMPUTERNAME']/ ServerInstance[@Name='$InstanceName']/ServerProtocol[@Name='Tcp']"  
-$Tcp = $wmi.GetSmoObject($uri)  
-$Tcp.IsEnabled = $true
-$Tcp.Alter()
+    Enable-Protocol 'TCP/IP'
+    Enable-Protocol 'Named Pipes'
 
-$uri = "ManagedComputer[@Name='$Env:COMPUTERNAME']/ ServerInstance[@Name='$InstanceName']/ServerProtocol[@Name='Np']"  
-$Np = $wmi.GetSmoObject($uri)  
-$Np.IsEnabled = $true  
-$Np.Alter()  
-
-Get-Service $InstanceName | Restart-Service -Force
+    Get-Service $InstanceName | Restart-Service -Force
+}
 
 "`nInstallation length: {0:f1} minutes" -f ((Get-Date) - $start).TotalMinutes
 
