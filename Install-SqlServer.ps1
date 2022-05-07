@@ -10,6 +10,9 @@
 
     The script lists parameters provided to the native setup but hides sensitive data. See the provided
     links for SQL Server silent install details.
+.NOTES
+    Version: 1.0
+    Last change: 2022-05-07
 #>
 param(
     # Path to ISO file, if empty and current directory contains single ISO file, it will be used.
