@@ -23,7 +23,7 @@ The fastest way to install core SQL Server is to run in administrative shell:
 ./Install-SqlServer.ps1 -EnableProtocols
 ```
 
-This will install **SQL Server Development Edition** and enable all protocols. Provide your own ISO image of any edition using `ISOPath`.
+This will download and install **SQL Server Development Edition** and enable all protocols. Provide your own ISO image of any edition using `ISOPath`.
 
 This assumes number of default parameters and installs by default only `SQLEngine` feature. Run `Get-Help ./Install-SqlServer.ps1 -Full` for parameter details.
 
