@@ -40,6 +40,7 @@ To **test installation**, after running this script execute:
 - SQL Server Management Studio isn't distributed along with SQL Server any more. Install via chocolatey: [`cinst sql-server-management-studio`](https://chocolatey.org/packages/sql-server-management-studio)
 - On PowerShell 5 progress bar significantly slows down the download. Use `$progressPreference = 'silentlyContinue'` to disable it prior to calling this function.
 - SQL Server Development Edition has all features of Enterprise Edition and you can license it if needed.
+- SQL Server 2022 Development Edition Direct Download: https://download.microsoft.com/download/3/8/d/38de7036-2433-4207-8eae-06e247e17b25/SQLServer2022-x64-ENU-Dev.iso
 
 ## Troubleshooting
 
