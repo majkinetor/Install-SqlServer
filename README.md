@@ -43,18 +43,17 @@ To **test installation**, after running this script execute:
 
 ### How to find SQL Server direct download
 
-
 1. Download evaluation installer from official site
     - Example for v2022: https://www.microsoft.com/en-us/evalcenter/download-sql-server-2022
     - This downloads file: `SQL2022-SSEI-Eval.exe`
-1. Unpack exe using 7zip
+1. Unpack evalutation installer exe using 7zip
     - This unpacks its resources and other stuff as text files
-1. Search for `.iso` with using grep
+1. Search for `.iso` in files
+    - For example using [dngrep](https://dngrep.github.io)
 
 See ticket [#3](https://github.com/majkinetor/Install-SqlServer/issues/3#issuecomment-1536174746) for details.
 
 ### Direct download list
-
 
 1. [2022 Development Edition](https://download.microsoft.com/download/3/8/d/38de7036-2433-4207-8eae-06e247e17b25/SQLServer2022-x64-ENU-Dev.iso)
 2. [2019 Development Edition](https://download.microsoft.com/download/7/c/1/7c14e92e-bdcb-4f89-b7cf-93543e7112d1/SQLServer2019-x64-ENU-Dev.iso)
