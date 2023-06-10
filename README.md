@@ -1,6 +1,6 @@
 # Install-SqlServer
 
-[![](https://img.shields.io/badge/version-1.0-green)](https://github.com/majkinetor/Install-SqlServer)
+[![](https://img.shields.io/badge/version-1.1-green)](https://github.com/majkinetor/Install-SqlServer)
 
 This script installs MS SQL Server on Windows OS silently from ISO image that can be available locally or downloaded from the Internet.
 Transcript of entire operation is recorded in the log file.

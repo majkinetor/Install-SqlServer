@@ -11,8 +11,7 @@
     The script lists parameters provided to the native setup but hides sensitive data. See the provided
     links for SQL Server silent install details.
 .NOTES
-    Version: 1.0
-    Last change: 2022-05-07
+    Version: 1.1
 #>
 param(
     # Path to ISO file, if empty and current directory contains single ISO file, it will be used.
@@ -99,9 +98,16 @@ if (!$IsoPath) {
 
 Write-Host "`IsoPath: " $IsoPath
 
-$volume    = Mount-DiskImage $IsoPath -StorageType ISO -PassThru | Get-Volume
-$sql_drive = $volume.DriveLetter + ':'
-Get-ChildItem $sql_drive | ft -auto | Out-String
+$volume = Mount-DiskImage $IsoPath -StorageType ISO -PassThru | Get-Volume
+$iso_drive = if ($volume) {
+    $volume.DriveLetter + ':'
+} else {
+    # In Windows Sandbox for some reason Get-Volume returns nothing, so lets look for the ISO description
+    Get-PSDrive | ? Description -like 'sql*' | % Root
+}
+if (!$iso_drive) { throw "Can't find mounted ISO drive" } else { Write-Host "ISO drive: $iso_drive" }
+
+Get-ChildItem $iso_drive | ft -auto | Out-String
 
 Get-CimInstance win32_process | ? { $_.commandLine -like '*setup.exe*/ACTION=install*' } | % {
     Write-Host "Sql Server installer is already running, killing it:" $_.Path  "pid: " $_.processId
@@ -109,7 +115,7 @@ Get-CimInstance win32_process | ? { $_.commandLine -like '*setup.exe*/ACTION=ins
 }
 
 $cmd =@(
-    "${sql_drive}setup.exe"
+    "${iso_drive}setup.exe"
     '/Q'                                # Silent install
     '/INDICATEPROGRESS'                 # Specifies that the verbose Setup log file is piped to the console
     '/IACCEPTSQLSERVERLICENSETERMS'     # Must be included in unattended installations
