@@ -7,7 +7,7 @@ Transcript of entire operation is recorded in the log file.
 
 The script lists parameters provided to the native setup but hides sensitive data. See the provided links for SQL Server silent install details.
 
-The installer is tested with SQL Servers 2016-2019 and PowerShell 3-7.
+The installer is tested with SQL Servers 2016-2022 and PowerShell 3-7.
 
 ## Prerequisites
 
@@ -23,7 +23,7 @@ The fastest way to install core SQL Server is to run in administrative shell:
 ./Install-SqlServer.ps1 -EnableProtocols
 ```
 
-This will download and install **SQL Server Development Edition** and enable all protocols. Provide your own ISO image of any edition using `ISOPath`.
+This will download and install **SQL Server Development Edition** and enable all protocols. Provide your own ISO image of any edition using `ISOPath` script parameter.
 
 This assumes number of default parameters and installs by default only `SQLEngine` feature. Run `Get-Help ./Install-SqlServer.ps1 -Full` for parameter details.
 
